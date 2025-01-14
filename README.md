@@ -1,21 +1,18 @@
+<h1><img src="https://github.com/fahchen/kino_excalidraw/blob/main/images/kino-excalidraw.png?raw=true" alt="kino-excalidraw"></h1>
+
 # KinoExcalidraw
 
-**TODO: Add description**
+[![Docs](https://img.shields.io/badge/hex.pm-docs-8e7ce6.svg)](https://hexdocs.pm/kino_excalidraw)
+
+[Excalidraw](https://excalidraw.com) integrations with [Kino](https://github.com/livebook-dev/kino)
+for [Livebook](https://github.com/livebook-dev/livebook).
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `kino_excalidraw` to your list of dependencies in `mix.exs`:
+To bring KinoExcalidraw to Livebook all you need to do is `Mix.install/2`:
 
 ```elixir
-def deps do
-  [
-    {:kino_excalidraw, "~> 0.1.0"}
-  ]
-end
+Mix.install([
+  {:kino_excalidraw, "~> 0.1.0"}
+])
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/kino_excalidraw>.
-
