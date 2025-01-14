@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "build": "kino-bundler",
+    "dev": "kino-bundler --watch --dev"
+  },
+  "dependencies": {
+    "@excalidraw/excalidraw": "^0.17.6",
+    "@remixicon/react": "^4.6.0",
+    "core-js": "^3.40.0",
+    "lodash": "^4.17.21",
+    "mermaid": "^11.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@livebook/kino-bundler": "^0.2.1"
+  }
+}

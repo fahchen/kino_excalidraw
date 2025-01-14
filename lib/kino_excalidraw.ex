@@ -1,2 +1,0 @@
-defmodule KinoExcalidraw do
-end
