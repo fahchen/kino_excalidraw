@@ -18,7 +18,7 @@ export function deserializeData(data) {
 export const DEFAULT_HEIGHT = 600;
 export const MIN_HEIGHT = 500;
 
-export function normalizeHeight(value) {
+export function normalizeHeight(value, minHeight = MIN_HEIGHT) {
   if (!Number.isInteger(value)) {
     const int = Number(value);
 
@@ -27,7 +27,7 @@ export function normalizeHeight(value) {
     return normalizeHeight(int);
   }
 
-  if (value < MIN_HEIGHT) return MIN_HEIGHT;
+  if (value < minHeight) return minHeight;
 
   return value;
 }

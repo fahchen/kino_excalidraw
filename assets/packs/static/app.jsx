@@ -13,7 +13,7 @@ export function App({ store }) {
   );
 
   const style = {
-    height: `${normalizeHeight(cell.options.height)}px`,
+    height: `${normalizeHeight(cell.options.height, 10)}px`,
   };
 
   const initialData = {
