@@ -1,5 +1,11 @@
 # Components
 
+```elixir
+Mix.install([
+  {:kino_excalidraw, "~> 0.1.0"}
+])
+```
+
 ## KinoExcalidraw.SmartCell
 
 You can edit canvas freely.
