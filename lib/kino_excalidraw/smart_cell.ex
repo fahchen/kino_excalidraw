@@ -31,12 +31,15 @@ defmodule KinoExcalidraw.SmartCell do
     )
   end
 
+  valid_keys = ~w[variable data options]a
+
   defp atomize_attrs(attrs) do
-    Enum.map(attrs, fn
-      {key, value} when is_atom(key) -> {key, value}
-      {"variable", variable} -> {:variable, variable}
-      {"data", data} -> {:data, data}
-      {"options", options} -> {:options, options}
+    Enum.flat_map(attrs, fn
+      {key, value} when key in unquote(valid_keys) -> [{key, value}]
+      {"variable", variable} -> [{:variable, variable}]
+      {"data", data} -> [{:data, data}]
+      {"options", options} -> [{:options, options}]
+      _other -> []
     end)
   end
 
@@ -86,18 +89,14 @@ defmodule KinoExcalidraw.SmartCell do
 
   @impl true
   def to_attrs(ctx) do
-    %{
-      "variable" => ctx.assigns.cell.variable,
-      "data" => ctx.assigns.cell.data,
-      "options" => ctx.assigns.cell.options
-    }
+    Map.take(ctx.assigns.cell, [:variable, :data, :options])
   end
 
   @impl true
   def to_source(cell) do
-    variable = quoted_var(cell["variable"])
-    data = Macro.escape(cell["data"])
-    options = Macro.escape(cell["options"])
+    variable = quoted_var(cell.variable)
+    data = Macro.escape(cell.data)
+    options = Macro.escape(cell.options)
 
     quote do
       unquote(variable) =

@@ -1,7 +1,7 @@
 defmodule KinoExcalidraw.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @description "Excalidraw integration with Livebook"
 
   def project do
@@ -9,7 +9,7 @@ defmodule KinoExcalidraw.MixProject do
       app: :kino_excalidraw,
       version: @version,
       description: @description,
-      elixir: "~> 1.17",
+      elixir: "~> 1.14",
       name: "KinoExcalidraw",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
