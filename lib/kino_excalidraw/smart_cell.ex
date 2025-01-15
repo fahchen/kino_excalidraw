@@ -1,11 +1,18 @@
 defmodule KinoExcalidraw.SmartCell do
+  @moduledoc """
+  A SmartCell for embedding and editing Excalidraw diagrams in Livebook notebooks.
+  This SmartCell allows you to create and modify Excalidraw graphs, and configure various editor options.
+
+  See options in `Kino.Excalidraw.Options`.
+  """
+
   use Kino.JS, assets_path: "lib/assets/smart_cell/build"
   use Kino.JS.Live
   use Kino.SmartCell, name: "Excalidraw"
 
   use TypedStructor
 
-  alias KinoExcalidraw.Options
+  alias Kino.Excalidraw.Options
 
   typed_structor do
     field :variable, binary(), default: "excalidraw"
@@ -13,6 +20,7 @@ defmodule KinoExcalidraw.SmartCell do
     field :options, Options.t(), default: %{}
   end
 
+  @spec new(attrs :: Enumerable.t()) :: __MODULE__.t()
   def new(attrs \\ []) do
     __MODULE__
     |> struct(atomize_attrs(attrs))
