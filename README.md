@@ -13,6 +13,6 @@ To bring KinoExcalidraw to Livebook all you need to do is `Mix.install/2`:
 
 ```elixir
 Mix.install([
-  {:kino_excalidraw, "~> 0.1.0"}
+  {:kino_excalidraw, "< 1.0.0"}
 ])
 ```
