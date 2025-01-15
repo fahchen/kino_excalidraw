@@ -37,5 +37,9 @@ defmodule Kino.Excalidraw.OptionsTest do
                  grid_mode_enabled: true
                })
     end
+
+    test "ignores unexpected options" do
+      assert %{height: 600} === Options.build(%{height: 600, foo: :bar})
+    end
   end
 end
