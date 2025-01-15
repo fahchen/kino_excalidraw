@@ -9,7 +9,7 @@ defmodule KinoExcalidraw.MixProject do
       app: :kino_excalidraw,
       version: @version,
       description: @description,
-      elixir: "~> 1.17",
+      elixir: "~> 1.14",
       name: "KinoExcalidraw",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
