@@ -7,7 +7,8 @@ export function deserializeData(data) {
     try {
       const json = JSON.parse(data);
       return restore(json);
-    } catch (_e) {
+    } catch (e) {
+      console.log("Failed to deserialize data", e);
       return {};
     }
   } else {

@@ -1,4 +1,17 @@
-defmodule KinoExcalidraw.Options do
+defmodule Kino.Excalidraw.Options do
+  @moduledoc """
+  The options for configuring the Excalidraw editor.
+
+
+  | Option | Description | Default |
+  |--------|-------------| ------- |
+  | `:height` | The height of the editor in pixels. | `600` |
+  | `:scroll_to_content` | Whether to scroll to the content when the editor is loaded. | `true` |
+  | `:view_mode_enabled` | Whether the view mode is enabled. | `false` |
+  | `:zen_mode_enabled` | Whether the zen mode is enabled. | `false` |
+  | `:grid_mode_enabled` | Whether the grid mode is enabled. | `false` |
+  """
+
   @type t() :: %{
           optional(:height) => pos_integer(),
           optional(:scroll_to_content) => boolean(),
