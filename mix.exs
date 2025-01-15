@@ -1,7 +1,7 @@
 defmodule KinoExcalidraw.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @description "Excalidraw integration with Livebook"
 
   def project do
