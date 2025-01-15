@@ -15,12 +15,21 @@ defmodule KinoExcalidraw.SmartCell do
 
   def new(attrs \\ []) do
     __MODULE__
-    |> struct(attrs)
+    |> struct(atomize_attrs(attrs))
     |> Map.update!(:options, &Options.build/1)
     |> Map.update!(
       :variable,
       &Kino.SmartCell.prefixed_var_name("excalidraw", &1)
     )
+  end
+
+  defp atomize_attrs(attrs) do
+    Enum.map(attrs, fn
+      {key, value} when is_atom(key) -> {key, value}
+      {"variable", variable} -> {:variable, variable}
+      {"data", data} -> {:data, data}
+      {"options", options} -> {:options, options}
+    end)
   end
 
   @impl true
@@ -30,7 +39,7 @@ defmodule KinoExcalidraw.SmartCell do
 
   @impl true
   def handle_connect(ctx) do
-    {:ok, to_json(ctx.assigns.cell), ctx}
+    {:ok, Map.take(ctx.assigns.cell, [:variable, :data, :options]), ctx}
   end
 
   @impl true
@@ -69,14 +78,18 @@ defmodule KinoExcalidraw.SmartCell do
 
   @impl true
   def to_attrs(ctx) do
-    to_json(ctx.assigns.cell)
+    %{
+      "variable" => ctx.assigns.cell.variable,
+      "data" => ctx.assigns.cell.data,
+      "options" => ctx.assigns.cell.options
+    }
   end
 
   @impl true
   def to_source(cell) do
-    variable = quoted_var(cell.variable)
-    data = Macro.escape(cell.data)
-    options = Macro.escape(cell.options)
+    variable = quoted_var(cell["variable"])
+    data = Macro.escape(cell["data"])
+    options = Macro.escape(cell["options"])
 
     quote do
       unquote(variable) =
@@ -89,10 +102,6 @@ defmodule KinoExcalidraw.SmartCell do
   end
 
   defp quoted_var(string), do: {String.to_atom(string), [], nil}
-
-  defp to_json(%__MODULE__{} = cell) do
-    Map.take(cell, [:variable, :data, :options])
-  end
 
   defimpl Kino.Render do
     def to_livebook(_cell) do
