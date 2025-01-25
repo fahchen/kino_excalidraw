@@ -32,16 +32,16 @@ defmodule KinoExcalidraw.SmartCellTest do
   describe "initialization" do
     test "restores source code from attrs" do
       attrs = %{
-        "variable" => "graph",
         "data" => "{}",
-        "options" => %{"height" => 700}
+        "options" => %{"variable" => "graph", "height" => 700}
       }
 
       {_kino, source} = start_smart_cell!(SmartCell, attrs)
 
       assert source ==
                """
-               graph = KinoExcalidraw.SmartCell.new(data: "{}", options: %{height: 700})\
+               graph =
+                 KinoExcalidraw.SmartCell.new(data: "{}", options: %{height: 700, variable: "graph"})\
                """
     end
   end
@@ -49,9 +49,8 @@ defmodule KinoExcalidraw.SmartCellTest do
   describe "handle_event" do
     test "broadcast update_data event" do
       attrs = %{
-        "variable" => "graph",
         "data" => "{}",
-        "options" => %{"height" => 700}
+        "options" => %{"variable" => "graph", "height" => 700}
       }
 
       {kino, _source} = start_smart_cell!(SmartCell, attrs)
@@ -62,33 +61,34 @@ defmodule KinoExcalidraw.SmartCellTest do
       assert_smart_cell_update(
         kino,
         %{
-          variable: "graph",
           data: ^payload,
-          options: %{height: 700}
+          options: %{variable: "graph", height: 700}
         },
         """
-        graph = KinoExcalidraw.SmartCell.new(data: "{\\\"elements\\\": []}", options: %{height: 700})\
+        graph =
+          KinoExcalidraw.SmartCell.new(
+            data: "{\\\"elements\\\": []}",
+            options: %{height: 700, variable: "graph"}
+          )\
         """
       )
     end
 
     test "broadcast update_options event" do
       attrs = %{
-        "variable" => "graph",
         "data" => "{}",
-        "options" => %{"height" => 700}
+        "options" => %{"variable" => "graph", "height" => 700}
       }
 
       {kino, _source} = start_smart_cell!(SmartCell, attrs)
 
       push_event(kino, "update_options", %{"view_mode_enabled" => true})
-      options = %{height: 700, view_mode_enabled: true}
+      options = %{variable: "graph", height: 700, view_mode_enabled: true}
       assert_broadcast_event(kino, "update_options", ^options)
 
       assert_smart_cell_update(
         kino,
         %{
-          variable: "graph",
           data: "{}",
           options: ^options
         },
@@ -96,7 +96,7 @@ defmodule KinoExcalidraw.SmartCellTest do
         graph =
           KinoExcalidraw.SmartCell.new(
             data: "{}",
-            options: %{height: 700, view_mode_enabled: true}
+            options: %{height: 700, variable: "graph", view_mode_enabled: true}
           )\
         """
       )

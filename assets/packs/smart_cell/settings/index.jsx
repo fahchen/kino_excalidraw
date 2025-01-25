@@ -40,6 +40,13 @@ export function Settings({ options, onChange }) {
             onChange({ grid_mode_enabled: normalizeBoolean(e.target.checked) })}
         />
       </div>
+      <InputField
+        label="Variable"
+        description="The name of the variable used in the source code is usually not needed. However, this can lead to an issue where Livebook may hang when the graph becomes too complex."
+        type="text"
+        defaultValue={options.variable}
+        onChange={(e) => onChange({ variable: e.target.value })}
+      />
     </div>
   );
 }

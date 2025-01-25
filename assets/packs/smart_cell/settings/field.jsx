@@ -1,10 +1,18 @@
 import React, { useId } from "react";
 
-export function InputField({ label, defaultValue, onChange, ...props }) {
+export function InputField(
+  {
+    label,
+    description,
+    defaultValue,
+    onChange,
+    ...props
+  },
+) {
   const id = useId();
 
   return (
-    <div className="sm:col-span-4">
+    <div className="col-span-4">
       <label
         htmlFor={id}
         className="block text-sm/6 font-medium text-gray-900"
@@ -14,12 +22,18 @@ export function InputField({ label, defaultValue, onChange, ...props }) {
       <div className="mt-2">
         <input
           id={id}
-          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+          // use important to overwrite excalidraw's style
+          className="block w-full !rounded-md !bg-white !px-3 !py-1.5 !text-base !text-gray-900 !outline !outline-1 !-outline-offset-1 !outline-gray-300 !placeholder:text-gray-400 focus:outline !focus:outline-2 !focus:-outline-offset-2 !focus:outline-indigo-600"
           defaultValue={defaultValue}
           onChange={onChange}
           {...props}
         />
       </div>
+      {description && (
+        <p className="text-gray-600 text-xs">
+          {description}
+        </p>
+      )}
     </div>
   );
 }
