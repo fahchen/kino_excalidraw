@@ -15,7 +15,6 @@ defmodule KinoExcalidraw.SmartCell do
   alias Kino.Excalidraw.Options
 
   typed_structor do
-    field :variable, binary(), default: "excalidraw"
     field :data, binary()
     field :options, Options.t(), default: %{}
   end
@@ -25,23 +24,34 @@ defmodule KinoExcalidraw.SmartCell do
     __MODULE__
     |> struct(atomize_attrs(attrs))
     |> Map.update!(:options, &Options.build/1)
-    |> Map.update!(
-      :variable,
-      &Kino.SmartCell.prefixed_var_name("excalidraw", &1)
-    )
+    |> Map.update!(:options, &set_variable/1)
   end
 
-  valid_keys = ~w[variable data options]a
+  valid_keys = ~w[data options]a
 
   defp atomize_attrs(attrs) do
     Enum.flat_map(attrs, fn
       {key, value} when key in unquote(valid_keys) -> [{key, value}]
-      {"variable", variable} -> [{:variable, variable}]
       {"data", data} -> [{:data, data}]
       {"options", options} -> [{:options, options}]
       _other -> []
     end)
   end
+
+  defp set_variable(%{variable: variable} = options) when not is_nil(variable) do
+    if Kino.SmartCell.valid_variable_name?(variable) do
+      Map.update!(
+        options,
+        :variable,
+        &Kino.SmartCell.prefixed_var_name("excalidraw", &1)
+      )
+    else
+      # drop invalid variable name
+      Map.delete(options, :variable)
+    end
+  end
+
+  defp set_variable(options), do: options
 
   @impl true
   def init(attrs, ctx) do
@@ -50,7 +60,7 @@ defmodule KinoExcalidraw.SmartCell do
 
   @impl true
   def handle_connect(ctx) do
-    {:ok, Map.take(ctx.assigns.cell, [:variable, :data, :options]), ctx}
+    {:ok, Map.take(ctx.assigns.cell, [:data, :options]), ctx}
   end
 
   @impl true
@@ -89,23 +99,32 @@ defmodule KinoExcalidraw.SmartCell do
 
   @impl true
   def to_attrs(ctx) do
-    Map.take(ctx.assigns.cell, [:variable, :data, :options])
+    Map.take(ctx.assigns.cell, [:data, :options])
   end
 
   @impl true
   def to_source(cell) do
-    variable = quoted_var(cell.variable)
-    data = Macro.escape(cell.data)
-    options = Macro.escape(cell.options)
+    variable = Map.get(cell.options, :variable)
 
-    quote do
-      unquote(variable) =
-        KinoExcalidraw.SmartCell.new(
-          data: unquote(data),
-          options: unquote(options)
-        )
+    if variable do
+      variable = quoted_var(variable)
+      data = Macro.escape(cell.data)
+      options = Macro.escape(cell.options)
+
+      quote do
+        unquote(variable) =
+          KinoExcalidraw.SmartCell.new(
+            data: unquote(data),
+            options: unquote(options)
+          )
+      end
+      |> Kino.SmartCell.quoted_to_string()
+    else
+      quote do
+        Kino.nothing()
+      end
+      |> Kino.SmartCell.quoted_to_string()
     end
-    |> Kino.SmartCell.quoted_to_string()
   end
 
   defp quoted_var(string), do: {String.to_atom(string), [], nil}

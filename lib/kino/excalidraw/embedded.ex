@@ -16,12 +16,14 @@ defmodule Kino.Excalidraw.Embedded do
     field :options, Options.t(), default: %{}
   end
 
+  @valid_options ~w[height scroll_to_content view_mode_enabled zen_mode_enabled grid_mode_enabled]a
+
   @spec new(attrs :: Enumerable.t()) :: Kino.JS.t()
   def new(attrs \\ []) do
     cell =
       __MODULE__
       |> struct(attrs)
-      |> Map.update!(:options, &Options.build/1)
+      |> Map.update!(:options, &Options.build(&1, @valid_options))
       |> Map.from_struct()
 
     Kino.JS.new(__MODULE__, cell)
