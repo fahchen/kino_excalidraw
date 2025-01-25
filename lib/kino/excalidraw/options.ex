@@ -55,11 +55,13 @@ defmodule Kino.Excalidraw.Options do
   end
 
   @option_names [:variable, "variable"]
-  defp build_option({option, value}) when is_binary(value) when option in @option_names do
+  defp build_option({option, value}) when is_binary(value) and option in @option_names do
+    value = String.trim(value)
+
     if Kino.SmartCell.valid_variable_name?(value) do
       [{:variable, value}]
     else
-      []
+      [{:variable, nil}]
     end
   end
 
